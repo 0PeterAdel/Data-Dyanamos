@@ -102,19 +102,27 @@ Deliver a comprehensive report detailing:
 
 ## Repository Structure
 ```
-Human-Resources-Analysis/
-├── data/               # Raw and cleaned datasets
-├── notebooks/          # Jupyter notebooks for data preprocessing and analysis
-├── reports/            # Final report and presentations
-├── visualizations/     # Tableau dashboard files
-├── README.md           # Project documentation
-└── requirements.txt    # Dependencies
+Data-Dyanamos/
+├── Project-Operations/           # Contains all steps of the data analysis project
+│   ├── 01.Data-Collection/       # Scripts for gathering data from various sources
+│   ├── 02.Data-Wrangling/        # Code for transforming and organizing data
+│   ├── 03.Data-Cleaning/         # Procedures for cleaning and preparing data for analysis
+│   ├── 04.Data-Exploration-&-Transformation/ # Exploratory data analysis and transformation techniques
+│   ├── 05.Data-Modeling/         # Model development and training scripts
+│   └── 06.Data-Analysis/         # Analysis results and insights
+├── Instructions/                 # Instructions for running the project and using the code
+├── reports/                      # Final report and presentations
+├── DataSet/                      # Original data
+├── README.md                     # Project documentation
+│   └── PlainMap.md               # Plain map of project structure and flow
+├── requirements.txt              # Dependencies
+└── LICENSE                       # License information for the project
 ```
 
 ## How to Run
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/Human-Resources-Analysis.git
+   git clone https://github.com/0PeterAdel/Data-Dyanamos.git
    ```
 2. Install dependencies:
    ```bash
