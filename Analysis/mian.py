@@ -23,4 +23,3 @@ plt.show()
 sns.countplot(x='BusinessTravel', hue='Attrition', data=df)
 plt.title('Business Travel vs Attrition')
 plt.show()
-
