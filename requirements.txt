@@ -2,3 +2,6 @@ seaborn
 matplotlib
 pandas
 openpyxl
+numpy
+scikit-learn
+scipy
