@@ -7,7 +7,7 @@ This folder contains the code and files related to the data analysis phase of th
 - [**Documentation**](/Project-Operations/06.Data-Analysis/Documentation): Contains documents explaining the analysis processes and results.
 - [**Data.xlsx**](/Project-Operations/06.Data-Analysis/Data.xlsx): The dataset used for analysis.
 - [**analysis.ipynb**](/Project-Operations/06.Data-Analysis/analysis.ipynb): Jupyter Notebook containing the initial data analysis code and exploratory data analysis.
-- [**analysis2.ipynb**](/Project-Operations/06.Data-Analysis/analysis2.ipynb): An additional Jupyter Notebook for complementary data analysis.
+- [**analysis2.ipynb**](/Project-Operations/06.Data-Analysis/analysis-2.ipynb): An additional Jupyter Notebook for complementary data analysis.
 
 ## Libraries Used
 The following Python libraries were used in this phase:
