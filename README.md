@@ -120,16 +120,49 @@ Data-Dyanamos/
 ```
 
 ## How to Run
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/0PeterAdel/Data-Dyanamos.git
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Access the Jupyter notebooks in the `notebooks/` directory for data preprocessing and analysis.
-4. Open the Tableau dashboard for visualizations.
+### 1.Clone the Repository
+```sh
+git clone https://github.com/0PeterAdel/Data-Dyanamos.git
+cd Data-Dyanamos
+```
+
+### 2.Create a Virtual Environment
+#### On Windows (using `venv`)
+```sh
+python -m venv env
+env\Scripts\activate
+```
+
+#### On Linux/macOS (using `venv`)
+```sh
+python3 -m venv env
+source env/bin/activate
+```
+
+### 2. Install dependencies:
+```sh
+pip install -r requirements.txt
+```
+   
+### 3. Access the Jupyter notebooks in the `notebooks/` directory for data preprocessing and analysis.
+```sh
+cd Project-Operations/06.Data-Analysis
+```
+   
+### 5. Open the Tableau dashboard for visualizations.
+```sh
+cd Project-Operations/07.Data-visualizations
+```
+
+---
 
 ## Conclusion
 This project aims to deliver valuable insights into HR data, assisting decision-makers in optimizing organizational strategies. The integration of data analysis, forecasting, and visualization ensures actionable outcomes to drive positive changes within the organization.
+
+###
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=65&section=footer"/>
+</p>
+
+###
