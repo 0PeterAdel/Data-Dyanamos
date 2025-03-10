@@ -9,7 +9,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import accuracy_score, classification_report, mean_absolute_error, r2_score
 
 # Stage 1: Data Loading and Preprocessing
-# Purpose: Load and prepare the data for analysis ( foundational step for all questions)
 def load_and_prepare_data(file_path):
     """Load and preprocess employee data from Excel file."""
     try:
@@ -28,7 +27,6 @@ def load_and_prepare_data(file_path):
         return None
 
 # Stage 2: Model Training Functions
-# Purpose: Define reusable functions for training models (used across multiple questions)
 def train_classification_model(df, features, target, class_weight=None):
     """Train and evaluate a classification model."""
     X = df[features]
@@ -58,10 +56,9 @@ def train_regression_model(df, features, target):
     print(f"🔍 {target} R² Score: {r2:.2f}")
     return model
 
-# Stage 3: Input Validation and Preprocessing
-# Purpose: Collect and validate input data for new employees (used for predictions in multiple questions)
+# Stage 3: Input Validation and Preprocessing (Edited Function)
 def get_new_employee_data(df, numerical_features, categorical_features, feature_ranges):
-    """Collect, validate, and process input data for a new employee."""
+    """Collect, validate, and process input data for a new employee with clarified categorical options."""
     print("\n🔹 Enter new employee details:")
     employee_data = {}
     
@@ -83,10 +80,71 @@ def get_new_employee_data(df, numerical_features, categorical_features, feature_
             except ValueError:
                 print("❌ Invalid input. Please enter a number.")
     
-    # Collect categorical features
+    # Collect categorical features with clarifications
     for feature in categorical_features:
-        value = input(f"{feature}: ")
-        employee_data[feature] = value
+        if feature == "OverTime":
+            print("OverTime options:")
+            print("1. refers to 'Yes'")
+            print("2. refers to 'No'")
+            while True:
+                value = input(f"{feature} (enter 1 or 2): ")
+                if value == "1":
+                    employee_data[feature] = "Yes"
+                    break
+                elif value == "2":
+                    employee_data[feature] = "No"
+                    break
+                else:
+                    print("❌ Invalid input. Please enter 1 or 2.")
+        
+        elif feature == "Department":
+            print("Department options:")
+            print("1. refers to 'Human Resources'")
+            print("2. refers to 'Sales'")
+            print("3. refers to 'Technology'")
+            while True:
+                value = input(f"{feature} (enter 1, 2, or 3): ")
+                if value == "1":
+                    employee_data[feature] = "Human Resources"
+                    break
+                elif value == "2":
+                    employee_data[feature] = "Sales"
+                    break
+                elif value == "3":
+                    employee_data[feature] = "Technology"
+                    break
+                else:
+                    print("❌ Invalid input. Please enter 1, 2, or 3.")
+        
+        elif feature == "JobRole":
+            print("JobRole options:")
+            print("1. refers to 'Analytics Manager'")
+            print("2. refers to 'Data Scientist'")
+            print("3. refers to 'Engineering Manager'")
+            print("4. refers to 'HR Business Partner'")
+            print("5. refers to 'HR Executive'")
+            print("6. refers to 'HR Manager'")
+            print("7. refers to 'Machine Learning Engineer'")
+            print("8. refers to 'Manager'")
+            print("9. refers to 'Recruiter'")
+            print("10. refers to 'Sales Executive'")
+            print("11. refers to 'Sales Representative'")
+            print("12. refers to 'Senior Software Engineer'")
+            print("13. refers to 'Software Engineer'")
+            while True:
+                value = input(f"{feature} (enter 1-13): ")
+                role_mapping = {
+                    "1": "Analytics Manager", "2": "Data Scientist", "3": "Engineering Manager",
+                    "4": "HR Business Partner", "5": "HR Executive", "6": "HR Manager",
+                    "7": "Machine Learning Engineer", "8": "Manager", "9": "Recruiter",
+                    "10": "Sales Executive", "11": "Sales Representative", "12": "Senior Software Engineer",
+                    "13": "Software Engineer"
+                }
+                if value in role_mapping:
+                    employee_data[feature] = role_mapping[value]
+                    break
+                else:
+                    print("❌ Invalid input. Please enter a number between 1 and 13.")
     
     # Create DataFrame and apply one-hot encoding
     employee_df = pd.DataFrame([employee_data])
@@ -115,7 +173,7 @@ feature_ranges = {
     "WorkLifeBalance": (1, 5),
     "SelfRating": (1, 5),
     "ManagerRating": (1, 5),
-    "Salary": (0, 1e7)  # Adjust max salary as needed
+    "Salary": (1000, 999999)
 }
 
 # Define input features
@@ -134,32 +192,25 @@ common_features = [
 ]
 
 # Stage 4: Question-Specific Code
-# Question 1: Which employees are likely to leave the organization based on factors like job satisfaction, education level, or performance rating?
-# Question 3: What is the likelihood that an employee will leave the company based on their data (e.g., age, job role, years of service, salary, etc.)?
 if "Attrition_Yes" in df.columns:
     turnover_features = common_features + ["Salary", "OverTime_Yes"]
     turnover_model = train_classification_model(df, turnover_features, "Attrition_Yes", class_weight="balanced")
 
-# Question 2: How long is an employee expected to stay at the company?
 if "YearsAtCompany" in df.columns:
     tenure_features = [f for f in common_features if f != "YearsAtCompany"]
     tenure_model = train_regression_model(df, tenure_features, "YearsAtCompany")
 
-# Question 4: What are the key factors that predict high or low employee performance ratings?
 if "PerformanceRating" in df.columns:
     performance_features = common_features + ["YearsAtCompany", "Salary"]
     performance_model = train_classification_model(df, performance_features, "PerformanceRating")
-    # Feature importances
     importances = performance_model.feature_importances_
     feature_importance_df = pd.DataFrame({"Feature": performance_features, "Importance": importances}).sort_values(by="Importance", ascending=False)
     print("\n🔑 Key Factors for Performance Ratings:\n", feature_importance_df)
 
-# Question 5: What is the level of job satisfaction of an employee based on factors like travel, salary, management, etc.?
 if "JobSatisfaction" in df.columns:
     satisfaction_features = [f for f in common_features if f != "JobSatisfaction"]
     satisfaction_model = train_classification_model(df, satisfaction_features, "JobSatisfaction")
 
-# Question 6: Which employees are most likely to be promoted based on their performance and tenure?
 promotion_column = [col for col in df.columns if "Promotion" in col]
 if not promotion_column and "YearsSinceLastPromotion" in df.columns:
     df["Promotion"] = (df["YearsSinceLastPromotion"] == 0).astype(int)
@@ -168,7 +219,6 @@ if promotion_column:
     promotion_features = common_features + ["YearsAtCompany", "SelfRating", "ManagerRating"]
     promotion_model = train_classification_model(df, promotion_features, promotion_column[0], class_weight="balanced")
 
-# Question 7: Which groups of employees are at the highest risk of leaving, and what strategies could reduce their likelihood of leaving?
 if "Attrition_Yes" in df.columns:
     high_risk_employees = df[df["Attrition_Yes"] == 1]
     if "JobSatisfaction" in df.columns:
@@ -179,22 +229,18 @@ if "Attrition_Yes" in df.columns:
     print("- Reduce overtime and improve work-life balance.")
     print("- Offer competitive salaries and career growth opportunities.")
 
-# Question 8: Does working overtime increase the likelihood of an employee leaving the company?
 if "OverTime_Yes" in df.columns and "Attrition_Yes" in df.columns:
     sns.boxplot(x="OverTime_Yes", y="Attrition_Yes", data=df)
     plt.title("Impact of Overtime on Attrition")
     plt.show()
 
-# Question 9: What is the expected salary of an employee based on their department, experience, and job role?
 if "Salary" in df.columns:
     salary_features = [col for col in df.columns if "Department" in col or "JobRole" in col] + ["YearsAtCompany", "Education"]
     salary_model = train_regression_model(df, salary_features, "Salary")
 
 # Stage 5: Predictions for New Employee
-# Collect and validate new employee data
 new_employee_data = get_new_employee_data(df, numerical_input_features, categorical_input_features, feature_ranges)
 
-# Make predictions for new employee
 if "Attrition_Yes" in df.columns:
     turnover_pred = turnover_model.predict(new_employee_data[turnover_features])[0]
     print("\n🚨 Attrition Likelihood (Q1 & Q3):", "Yes" if turnover_pred == 1 else "No")
