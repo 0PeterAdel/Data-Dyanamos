@@ -7,9 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import accuracy_score, classification_report, mean_absolute_error, r2_score
-from sklearn.preprocessing import LabelEncoder
 
 # Stage 1: Data Loading and Preprocessing
+# Purpose: Load and prepare the data for analysis ( foundational step for all questions)
 def load_and_prepare_data(file_path):
     """Load and preprocess employee data from Excel file."""
     try:
@@ -28,6 +28,7 @@ def load_and_prepare_data(file_path):
         return None
 
 # Stage 2: Model Training Functions
+# Purpose: Define reusable functions for training models (used across multiple questions)
 def train_classification_model(df, features, target, class_weight=None):
     """Train and evaluate a classification model."""
     X = df[features]
@@ -58,6 +59,7 @@ def train_regression_model(df, features, target):
     return model
 
 # Stage 3: Input Validation and Preprocessing
+# Purpose: Collect and validate input data for new employees (used for predictions in multiple questions)
 def get_new_employee_data(df, numerical_features, categorical_features, feature_ranges):
     """Collect, validate, and process input data for a new employee."""
     print("\n🔹 Enter new employee details:")
@@ -95,7 +97,7 @@ def get_new_employee_data(df, numerical_features, categorical_features, feature_
     return employee_df_encoded
 
 # Main Execution
-file_path = "HrData.xlsx"  # Adjust path as needed
+file_path = "HrData.xlsx"
 df = load_and_prepare_data(file_path)
 if df is None:
     exit()
@@ -131,19 +133,33 @@ common_features = [
     "SelfRating", "ManagerRating"
 ]
 
-# Train models with corrected feature sets
+# Stage 4: Question-Specific Code
+# Question 1: Which employees are likely to leave the organization based on factors like job satisfaction, education level, or performance rating?
+# Question 3: What is the likelihood that an employee will leave the company based on their data (e.g., age, job role, years of service, salary, etc.)?
 if "Attrition_Yes" in df.columns:
     turnover_features = common_features + ["Salary", "OverTime_Yes"]
     turnover_model = train_classification_model(df, turnover_features, "Attrition_Yes", class_weight="balanced")
 
+# Question 2: How long is an employee expected to stay at the company?
 if "YearsAtCompany" in df.columns:
     tenure_features = [f for f in common_features if f != "YearsAtCompany"]
     tenure_model = train_regression_model(df, tenure_features, "YearsAtCompany")
 
+# Question 4: What are the key factors that predict high or low employee performance ratings?
+if "PerformanceRating" in df.columns:
+    performance_features = common_features + ["YearsAtCompany", "Salary"]
+    performance_model = train_classification_model(df, performance_features, "PerformanceRating")
+    # Feature importances
+    importances = performance_model.feature_importances_
+    feature_importance_df = pd.DataFrame({"Feature": performance_features, "Importance": importances}).sort_values(by="Importance", ascending=False)
+    print("\n🔑 Key Factors for Performance Ratings:\n", feature_importance_df)
+
+# Question 5: What is the level of job satisfaction of an employee based on factors like travel, salary, management, etc.?
 if "JobSatisfaction" in df.columns:
     satisfaction_features = [f for f in common_features if f != "JobSatisfaction"]
     satisfaction_model = train_classification_model(df, satisfaction_features, "JobSatisfaction")
 
+# Question 6: Which employees are most likely to be promoted based on their performance and tenure?
 promotion_column = [col for col in df.columns if "Promotion" in col]
 if not promotion_column and "YearsSinceLastPromotion" in df.columns:
     df["Promotion"] = (df["YearsSinceLastPromotion"] == 0).astype(int)
@@ -152,28 +168,49 @@ if promotion_column:
     promotion_features = common_features + ["YearsAtCompany", "SelfRating", "ManagerRating"]
     promotion_model = train_classification_model(df, promotion_features, promotion_column[0], class_weight="balanced")
 
-# Collect and validate new employee data
-new_employee_data = get_new_employee_data(df, numerical_input_features, categorical_input_features, feature_ranges)
-
-# Make predictions
+# Question 7: Which groups of employees are at the highest risk of leaving, and what strategies could reduce their likelihood of leaving?
 if "Attrition_Yes" in df.columns:
-    turnover_pred = turnover_model.predict(new_employee_data[turnover_features])[0]
-    print("\n🚨 Attrition Likelihood:", "Yes" if turnover_pred == 1 else "No")
+    high_risk_employees = df[df["Attrition_Yes"] == 1]
+    if "JobSatisfaction" in df.columns:
+        avg_job_satisfaction = high_risk_employees["JobSatisfaction"].mean()
+        print(f"\n🚨 Average Job Satisfaction for High-Risk Employees: {avg_job_satisfaction:.2f}")
+    print("Strategies to Reduce Attrition:")
+    print("- Enhance job satisfaction through better work conditions.")
+    print("- Reduce overtime and improve work-life balance.")
+    print("- Offer competitive salaries and career growth opportunities.")
 
-if "YearsAtCompany" in df.columns:
-    tenure_pred = max(tenure_model.predict(new_employee_data[tenure_features])[0], 0)
-    print("\n🚀 Predicted Tenure (Years):", round(tenure_pred, 2))
-
-if "JobSatisfaction" in df.columns:
-    satisfaction_pred = satisfaction_model.predict(new_employee_data[satisfaction_features])[0]
-    print("\n😊 Predicted Job Satisfaction (1-5):", satisfaction_pred)
-
-if promotion_column:
-    promotion_pred = promotion_model.predict(new_employee_data[promotion_features])[0]
-    print("\n🚀 Promotion Likelihood:", "Yes" if promotion_pred == 1 else "No")
-
-# Optional visualization
+# Question 8: Does working overtime increase the likelihood of an employee leaving the company?
 if "OverTime_Yes" in df.columns and "Attrition_Yes" in df.columns:
     sns.boxplot(x="OverTime_Yes", y="Attrition_Yes", data=df)
     plt.title("Impact of Overtime on Attrition")
     plt.show()
+
+# Question 9: What is the expected salary of an employee based on their department, experience, and job role?
+if "Salary" in df.columns:
+    salary_features = [col for col in df.columns if "Department" in col or "JobRole" in col] + ["YearsAtCompany", "Education"]
+    salary_model = train_regression_model(df, salary_features, "Salary")
+
+# Stage 5: Predictions for New Employee
+# Collect and validate new employee data
+new_employee_data = get_new_employee_data(df, numerical_input_features, categorical_input_features, feature_ranges)
+
+# Make predictions for new employee
+if "Attrition_Yes" in df.columns:
+    turnover_pred = turnover_model.predict(new_employee_data[turnover_features])[0]
+    print("\n🚨 Attrition Likelihood (Q1 & Q3):", "Yes" if turnover_pred == 1 else "No")
+
+if "YearsAtCompany" in df.columns:
+    tenure_pred = max(tenure_model.predict(new_employee_data[tenure_features])[0], 0)
+    print("\n🚀 Predicted Tenure (Years) (Q2):", round(tenure_pred, 2))
+
+if "JobSatisfaction" in df.columns:
+    satisfaction_pred = satisfaction_model.predict(new_employee_data[satisfaction_features])[0]
+    print("\n😊 Predicted Job Satisfaction (1-5) (Q5):", satisfaction_pred)
+
+if promotion_column:
+    promotion_pred = promotion_model.predict(new_employee_data[promotion_features])[0]
+    print("\n🚀 Promotion Likelihood (Q6):", "Yes" if promotion_pred == 1 else "No")
+
+if "Salary" in df.columns:
+    salary_pred = salary_model.predict(new_employee_data[salary_features])[0]
+    print("\n💰 Predicted Salary (Q9):", round(salary_pred, 2))
