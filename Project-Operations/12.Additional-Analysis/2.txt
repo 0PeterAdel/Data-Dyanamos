@@ -1,0 +1,57 @@
+Step 1: Loading the Data
+We assume the Excel file contains at least two sheets with the following structure:
+
+'Employee' Sheet: Columns include EmployeeID, Age, DistanceFromHome, Department, JobRole, Salary, HireDate, Attrition, YearsAtCompany, YearsSinceLastPromotion.
+'PerformanceRating' Sheet: Columns include EmployeeID, ReviewDate, EnvironmentSatisfaction, JobSatisfaction, WorkLifeBalance, ManagerRating.
+---
+
+Analysis 1: Employee Engagement Analysis
+Objective
+This analysis measures employee satisfaction and motivation using the EnvironmentSatisfaction column from performance data and correlates it with performance metrics (ManagerRating). It helps identify areas for improvement, such as the work environment or corporate culture, if satisfaction levels are low.
+
+Steps
+Extract the latest performance review for each employee.
+Merge it with employee data.
+Analyze and visualize environmental satisfaction.
+Explore its relationship with performance.
+
+Interpretation
+Average Environmental Satisfaction: A score near 5 indicates high satisfaction, while a score below 3 suggests dissatisfaction and a need for improvement in the work environment or culture.
+Distribution: If the histogram skews left (higher values), most employees are satisfied. A right skew (lower values) indicates widespread dissatisfaction.
+Correlation: A positive value (e.g., 0.3 or higher) suggests that satisfied employees tend to receive better performance ratings, reinforcing the link between engagement and performance.
+If satisfaction is low, the company might consider enhancing the workplace (e.g., better facilities) or fostering a stronger corporate culture (e.g., recognition programs).
+---
+
+Analysis 2: Predictive Analytics
+Objective
+This analysis uses machine learning to predict human resource trends:
+
+Which employees are most likely to leave? (Attrition prediction)
+What factors influence high performance? (Performance prediction)
+How can recruitment strategies be improved? (Inferred from insights)
+Approach
+Attrition Prediction: A classification model predicts Attrition (Yes/No).
+Performance Prediction: A regression model predicts ManagerRating.
+Recruitment Insights: Derived from key factors identified in both models.
+
+1. Attrition Prediction
+2. Performance Prediction
+
+Interpretation
+Attrition Prediction
+Accuracy: A value above 0.7 indicates reasonable predictive power.
+Classification Report: Shows precision, recall, and F1-score for Yes (leaving) and No (staying).
+Feature Importances: Factors like YearsSinceLastPromotion or EnvironmentSatisfaction may rank high, suggesting that lack of growth or poor work environment drives turnover.
+Performance Prediction
+Mean Squared Error (MSE): A lower value (e.g., < 1.0 on a 1-5 scale) indicates better prediction accuracy.
+Feature Importances: Factors like EnvironmentSatisfaction or YearsAtCompany may be key drivers of high performance.
+Recruitment Strategy Improvements
+From attrition insights: Hire candidates less likely to leave (e.g., those valuing stability over frequent promotions).
+From performance insights: Target candidates with traits linked to high performance (e.g., adaptability to work-life balance).
+---
+
+Conclusion
+This script delivers:
+
+Employee Engagement Analysis: Assesses satisfaction via EnvironmentSatisfaction and its link to ManagerRating, highlighting areas like work environment or culture for improvement.
+Predictive Analytics: Uses AI to predict attrition and performance, identifying critical factors and informing recruitment strategies.
