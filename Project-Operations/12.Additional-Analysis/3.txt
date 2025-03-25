@@ -1,4 +1,4 @@
-Step 1: Understanding the Data and Setup
+Step 0: Understanding the Data and Setup
 Excel File Structure
 The Excel file contains five sheets with the following columns:
 
@@ -30,11 +30,11 @@ Python Libraries
 Let's import the necessary libraries:
 ---
 
-Step 2: Load the Data
+Step 1: Load the Data
 load the Excel sheets into Pandas DataFrames. Replace 'path_to_file.xlsx' with the actual file path.
 ---
 
-Step 3: GAP Analysis
+Step 2: GAP Analysis
 Objective
 Identify the gap between current and desired performance. Since explicit skills data (e.g., AI skills) isn't available, we'll use ManagerRating as a performance proxy and compare each employee's rating to the average for their JobRole, assuming the average represents the desired performance level.
 
@@ -49,7 +49,7 @@ A negative gap indicates an employee is performing below their job role's averag
 The correlation with TrainingOpportunitiesTaken suggests whether training impacts performance gaps.
 ---
 
-Step 4: 9-Box Grid Analysis
+Step 3: 9-Box Grid Analysis
 Objective
 Place employees in a 3x3 grid based on:
 
@@ -69,7 +69,7 @@ The grid shows employee counts in each category (e.g., "High Performance, High P
 Useful for identifying top talent (top-right) or those needing development (bottom-left).
 ---
 
-Step 5: Balanced Scorecard Analysis
+Step 4: Balanced Scorecard Analysis
 Objective
 Evaluate HR performance across four perspectives:
 
@@ -90,7 +90,7 @@ Processes: Utilization < 1 suggests underused training; high years since promoti
 Learning: High training taken and recent promotions signal growth investment.
 ---
 
-Step 6: Conclusion
+Step 5: Conclusion
 code performs all three analyses:
 
 GAP Analysis: Identifies performance gaps relative to job role averages.
