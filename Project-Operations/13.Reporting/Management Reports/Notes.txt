@@ -1,0 +1,8 @@
+These reports are based on a random sample, which is the HR department, out of three departments. This sample was chosen because it represents great interest in the states based on the analysis, and also this section is based on several factors. On the other hand, this is the subject of our project.
+
+
+
+Sales Report------Sales Department Sample
+IT Report------IT Department Sample
+Internal Auditing Report------HR Department Sample
+Accounting and Finance Report------HR Department Sample
